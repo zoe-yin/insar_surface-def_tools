@@ -1,1 +1,0 @@
-combined_basic_inversion.param

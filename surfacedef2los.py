@@ -26,8 +26,10 @@ def surfacedefplot(disp_file,region=None,cpt=None):
     ----------
     disp_file : string
         Full path to the .disp file
-    directory : string, optional
-        location of model. The default is None.
+    region : 4 element array with PyGMT formatting region [min_lon, max_lon, min_lat, max_lat]
+        e.g., 'region=[35.5, 38.5, 36, 38.5]'
+    cpt : 3 element array with bounds of cpt in m
+        e.g., 'cpt = [-3,3,0.1]'
     Returns
     -------
     Returns Pygmt figure object
@@ -49,7 +51,7 @@ def surfacedefplot(disp_file,region=None,cpt=None):
 
     ## SET UP  ##
     fig = pygmt.Figure()
-    pygmt.config(FORMAT_GEO_MAP="ddd.x", MAP_FRAME_TYPE="plain", FONT="11p")
+    pygmt.config(FORMAT_GEO_MAP="ddd.xx", MAP_FRAME_TYPE="plain", FONT="11p")
     if region == None:
         region = [35.5, 38.5, 36, 38.5]
     if cpt == None:
@@ -57,15 +59,15 @@ def surfacedefplot(disp_file,region=None,cpt=None):
     # set the projection to mercator 0/0 projection with 20cm height
     projection = 'M0/0/20c'
 
-    ### Plot the Observed data 
-    # obs_da = los_ds.los
-    # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # ### Plot the Observed data 
+    # # obs_da = los_ds.los
+    # # Plot hillshade
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
 
     pygmt.makecpt(cmap="vik", series=cpt)
-    fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
+    fig.basemap(region=region, projection=projection, frame=["a0.05f0.01"])
 
     fig.plot(
         x=modeled_disp['lon'],
@@ -77,8 +79,8 @@ def surfacedefplot(disp_file,region=None,cpt=None):
         transparency=30,
     )
 
-    fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
-    fig.colorbar(frame="af+lLOS (m)",transparency=30)
+    # fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
+    fig.colorbar(frame="af+lEast/West (m)",transparency=30)
 
     ## MOVE TO NEXT SUBPLOT ##
     fig.shift_origin(xshift="w+6c")
@@ -87,12 +89,12 @@ def surfacedefplot(disp_file,region=None,cpt=None):
     # model_da = a2_a184_mod_proj
 
     # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
 
     pygmt.makecpt(cmap="vik", series=cpt)
-    fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
+    fig.basemap(region=region, projection=projection, frame=["a0.05f0.01"])
 
     fig.plot(
         x=modeled_disp['lon'],
@@ -104,8 +106,8 @@ def surfacedefplot(disp_file,region=None,cpt=None):
         transparency=30,
     )
 
-    fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
-    fig.colorbar(frame="af+lLOS (m)",transparency=30)
+    # fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
+    fig.colorbar(frame="af+lNorth/South (m)",transparency=30)
 
     ## MOVE TO NEXT SUBPLOT ##
     fig.shift_origin(xshift="w+6c")
@@ -113,11 +115,12 @@ def surfacedefplot(disp_file,region=None,cpt=None):
     ### Plot the residual 
     # residual_da = a2_a184_mod_proj_residual
     # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+
     pygmt.makecpt(cmap="vik", series=cpt)
-    fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
+    fig.basemap(region=region, projection=projection, frame=["a0.05f0.01"])
     fig.plot(
         x=modeled_disp['lon'],
         y=modeled_disp['lat'],
@@ -127,8 +130,8 @@ def surfacedefplot(disp_file,region=None,cpt=None):
         pen=None,
         transparency=30,
     )
-    fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
-    fig.colorbar(frame="af+lLOS (m)",transparency=30)    
+    # fig.coast(shorelines=False, region=region, projection=projection, water='204/212/219')
+    fig.colorbar(frame="af+lUp/Down (m)",transparency=30)    
     
     return fig
 
@@ -214,9 +217,9 @@ def residual_plot(obs_da, model_da, residual_da, region=None,cpt=None):
     ### Plot the Observed data 
     # obs_da = los_ds.los
     # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
 
     pygmt.makecpt(cmap="vik", series=cpt)
     fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
@@ -238,9 +241,9 @@ def residual_plot(obs_da, model_da, residual_da, region=None,cpt=None):
     # model_da = a2_a184_mod_proj
 
     # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
 
     pygmt.makecpt(cmap="vik", series=cpt)
     fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
@@ -261,9 +264,10 @@ def residual_plot(obs_da, model_da, residual_da, region=None,cpt=None):
     ### Plot the residual 
     # residual_da = a2_a184_mod_proj_residual
     # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+
     pygmt.makecpt(cmap="vik", series=cpt)
     fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
     fig.grdimage(
@@ -297,13 +301,13 @@ def surfacedef2los(disp_file,look):
     ##########################
     # Read in cutde displacement file
     #Longitude, Latitude, Elevation, Easting Displacement (m), Northing Displacement (m), Vertical Displacement (m)
-    df = pd.read_csv(disp_file, sep='\t',header=0, names=['lon','lat', 'elev','disp_e','disp_n','disp_u'])
+    modeled_disp = pd.read_csv(disp_file, sep='\t',header=0, names=['lon','lat', 'elev','disp_e','disp_n','disp_u'])
 
-    modeled_disp = df.to_array()
-    
+    # modeled_disp = df.to_array()
+
     # Project the surface def vector (modeled_disp) onto the look vector (e,n,u)
     # Manually calculating the dot product for sanity
-    proj = modeled_disp['disp_e']*look[0] + modeled_disp['disp_n']*look[1] + modeled_disp['disp_u']*look[2]
+    proj = -modeled_disp['disp_e']*look[0] - modeled_disp['disp_n']*look[1] - modeled_disp['disp_u']*look[2]
 
     # Add the projected LOS data to a copy of the modeled_disp dataframe
     modeled_disp_new = modeled_disp.copy()
@@ -354,10 +358,10 @@ def plot_grd(da,region=None, cpt=None):
     fig = pygmt.Figure()
     pygmt.config(FORMAT_GEO_MAP="ddd.x", MAP_FRAME_TYPE="plain", FONT="11p")
 
-    # Plot hillshade
-    gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
-    pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
-    fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
+    # # Plot hillshade
+    # gradientgrd = '/Users/hyin/yin_usgs/turkiye_2023/surfacedef2LOS/topo/gradients.grd'
+    # pygmt.makecpt(cmap="gray", series=[-2,0.1, 0.1])
+    # fig.grdimage(region=region, projection=projection,grid=gradientgrd, cmap=True, nan_transparent=True)
     
     pygmt.makecpt(cmap="vik", series=cpt)
     fig.basemap(region=region, projection=projection, frame=["a0.5f0.1"])
